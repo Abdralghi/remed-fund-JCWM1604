@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Masukan kata :</h1>
+    <input type="text" placeholder="Masukan kata" id="kata">
+    <br><br>
+
+    <button onclick="hitungVokal()">HITUNG VOKAL</button>
+    <button onclick="hurufVokal()">HURUF VOKAL</button>
+    <button onclick="tanpaVokal()">TANPA VOKAL</button>
+    <br>
+    <div id="hasil">
+
+    </div>
+</body>
+<script> 
+
+    const hitungVokal = function(word){
+        var word=document.getElementById('kata').value
+        var words = word.toLowerCase()
+        var arr = words.split('')
+        var result = 0
+            if(arr.includes('a')){
+                result += 1
+            }
+            if(arr.includes('i')){
+                result+=1
+            }
+            if(arr.includes('u')){
+                result+=1
+            }
+            if(arr.includes('e')){
+                result+=1
+            }
+            if(arr.includes('o')){
+                result+=1
+            }
+        document.getElementById('hasil').innerHTML=`Hasil : ada ${result} huruf vokal berdampingan`
+    }
+
+    const hurufVokal = function(){
+        var word=document.getElementById('kata').value
+        var words = word.toLowerCase()
+        var arr = words.split('')
+        var result = ''
+            if(arr.includes('a')){
+                result += 'a, '
+            }
+            if(arr.includes('i')){
+                result+= 'i, '
+            }
+            if(arr.includes('u')){
+                result+= 'u, '
+            }
+            if(arr.includes('e')){
+                result+= 'e, '
+            }
+            if(arr.includes('o')){
+                result+= 'o, '
+            }
+        document.getElementById('hasil').innerHTML=`Huruf vokal : ${result}`
+    }
+
+    const tanpaVokal=function(kata){  
+        var kata = document.getElementById('kata').value   
+        var str = kata
+        var arr = str.split('')
+        // console.log(arr)
+        var result = ''
+        var vowel = ['a','i','u','e','o', 'A', 'I', 'U', 'E', 'O']
+        for(i=0;i<arr.length;i++){
+        for(j=0;j<vowel.length;j++){
+            if(arr[i] === vowel[j]){
+            arr.splice(i,1)
+            }
+        }
+        }
+        document.getElementById('hasil').innerHTML=`Tanpa vokal : ${arr.join('')}`
+    }
+    
+
+</script>
+</html>

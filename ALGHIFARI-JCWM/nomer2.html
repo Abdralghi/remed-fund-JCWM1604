@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table, th, tr, td{
+            border-collapse: collapse;
+            border: 1px solid black;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Form Product</h1>
+    <br>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="renderData">
+            
+            
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>#</td>
+                <td><input type="text" placeholder="masukan nama barang" id="barang"></td>
+                <td><input type="text" placeholder="masukan harga barang" id="harga"></td>
+                <td>
+                        <input type="radio" name="kategori"> food
+                        <input type="radio" name="kategori"> drink
+                        <input type="radio" name="kategori"> others
+                </td>
+                <td>
+                    <input type="button" value="ADD" onclick="addProduct()">
+                </td>
+            </tr>
+        </tfoot>
+    </table>  
+</body>
+<script>
+    class Product{
+        constructor(_name,_price,_category){
+            this.name=_name
+            this.price=_price
+            this.category=_category
+        }
+    }
+
+    var category=["food", "drink", "others"]
+    var indexedit = -1
+    var indexdelete = -1
+
+    var ListProduct = [
+        new Product('Coca Cola', 5000, category[1]),
+        new Product('Beng Beng', 4500, category[0]),
+        new Product('Fanta', 3500, category[1]),
+    ]
+
+    const printData=function(){
+        var result =  ListProduct.map((val,index)=>{
+            if(indexdelete == index){
+                return `<tr>
+                            <td>${index+1}</td>
+                            <td>${val.name}</td>
+                            <td>${val.price}</td>
+                            <td>${val.category}</td>
+                            <td>
+                                <input type="button" value="YES" onclick="onDeleteYes(${index})">
+                                <input type="button" value="NO" onclick="onDeleteNo()">
+                            </td>
+                        </tr>`     
+            }else if(indexedit == index){
+                return `<tr>
+                            <td>${index+1}</td>
+                            <td> <input type="text" value="${val.name}" placeholder="nama" id="editname${index}"></td>
+                            <td> <input type="text" value="${val.price}" placeholder="harga" id="editprice${index}"></td>
+                           
+                            <td>
+                                <input type="radio" name="kategori${index}"> food
+                                <input type="radio" name="kategori${index}"> drink
+                                <input type="radio" name="kategori${index}"> others
+                            </td>
+                            <td>
+                                <input type="button" value="SAVE" onclick="onEditYes(${index})">
+                                <input type="button" value="CANCEL" onclick="onEditNo()">
+                            </td>
+                        </tr>`
+            }
+            return `<tr>
+                        <td>${index+1}</td>
+                        <td>${val.name}</td>
+                        <td>${val.price}</td>
+                        <td>${val.category}</td>
+                        <td>
+                            <input type="button" value="EDIT" onclick="onEditClick(${index})">
+                            <input type="button" value="DELETE" onclick="onDeleteClick(${index})">
+                        </td>
+                    </tr>`
+        } )
+        document.getElementById('renderData').innerHTML=result.join('')
+    }
+    
+    const addProduct = function(){
+        var kategori
+        var kiri =  document.getElementsByName('kategori')[0].checked
+        var tengah = document.getElementsByName('kategori')[1].checked
+        var kanan = document.getElementsByName('kategori')[2].checked
+        if(kiri){
+            kategori="food"
+        }else if(tengah){
+            kategori="drink"
+        }else{
+            kategori="others"
+        }
+        var inputName =  document.getElementById('barang').value
+        var inputPrice = document.getElementById('harga').value 
+        var inputCategory = kategori
+        if(inputName && inputPrice && inputCategory){
+            var inputData = {name: inputName, price:inputPrice, category:kategori}
+            ListProduct.push(inputData)
+            printData(ListProduct)
+        }else{
+            alert('Input Datanya!!')
+        }
+    }
+
+    const onDeleteClick=function(index){
+        indexdelete=index
+        printData()
+    }
+
+    const onDeleteYes=function(index){
+        ListProduct.splice(index,1)
+        printData()
+    }
+
+    const onDeleteNo=function(){
+        indexdelete=-1
+        printData()
+    }
+
+    const onEditClick=function(index){
+        indexedit=index
+        printData()
+    }
+
+    const onEditNo=function(){
+        indexedit=-1
+        printData()
+    }
+
+    const onEditYes=function(index){
+        var editLeftCat =  document.getElementsByName('kategori'+indexedit)[0].checked
+        var editCenterCat = document.getElementsByName('kategori'+indexedit)[1].checked
+        var editRightCat = document.getElementsByName('kategori'+indexedit)[2].checked
+        var kategori
+        if(editLeftCat){
+            kategori="food"
+        }else if(editCenterCat){
+            kategori="drink"
+        }else{
+            kategori="others"
+        }
+        var editName = document.getElementById('editname'+indexedit).value
+        var editPrice = document.getElementById('editprice'+indexedit).value
+        ListProduct[index].name=editName
+        ListProduct[index].price=editPrice
+        ListProduct[index].category=kategori
+        indexedit = -1
+        printData()
+    }
+
+    printData()
+    
+</script>
+</html>
